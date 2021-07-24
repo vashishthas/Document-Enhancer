@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:document_enhancer_app/utils/constant.dart';
 import 'package:document_enhancer_app/utils/imageList.dart';
+import 'package:document_enhancer_app/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 
@@ -53,11 +54,16 @@ class _EditState extends State<Edit> {
               child: InkWell(
                   onTap: () {
                     setState(() {
-                      // MyImages.currentImageIndex += 1;
+                      if (MyImages.currentImageIndex < MyImages.maxIndex) {
+                        MyImages.currentImageIndex += 1;
+                      }
                     });
                   },
                   child: Icon(
                     Icons.redo_sharp,
+                    color: MyImages.currentImageIndex == MyImages.maxIndex
+                        ? Colors.white.withAlpha(100)
+                        : Colors.black,
                     // color: Colors.white
                   )),
             ),
@@ -81,7 +87,10 @@ class _EditState extends State<Edit> {
           selectedFontSize: 0,
           unselectedItemColor: Colors.white,
           selectedItemColor: Colors.red,
-          onTap: (index) async {
+          onTap: (index) {
+            tabIndex = index;
+            MyImages.maxIndex = MyImages.currentImageIndex;
+            Navigator.pushNamed(context, MyRoutes.sliderRoute);
             // Utils.imageFile != await cropPredefinedImage(Utils.imageFile);
             // setState(() {
             //   // tabIndex = index;

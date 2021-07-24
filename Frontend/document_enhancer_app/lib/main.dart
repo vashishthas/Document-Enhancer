@@ -1,3 +1,5 @@
+import 'package:document_enhancer_app/editTab/filterPage.dart';
+import 'package:document_enhancer_app/editTab/sliderEdit.dart';
 import 'package:document_enhancer_app/screens/edit_screen.dart';
 import 'package:document_enhancer_app/screens/enhance.dart';
 import 'package:document_enhancer_app/screens/first_screen.dart';
@@ -18,6 +20,8 @@ class MyApp extends StatelessWidget {
           MyRoutes.imageRoute: (context) => EnhanceRequest(),
           MyRoutes.chooseRoute: (context) => DialogScreen(),
           MyRoutes.editRoute: (context) => Edit(),
+          MyRoutes.filterRoute: (context) => FilterPage(),
+          MyRoutes.sliderRoute: (context) => SliderEdit(),
         },
         debugShowCheckedModeBanner: false,
         title: 'Document Enhancer',
