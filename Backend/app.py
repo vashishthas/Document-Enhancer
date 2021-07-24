@@ -4,7 +4,7 @@ from flask import Flask,jsonify,request
 
 
 app = Flask(__name__)
-
+port=80
 
 
 def convertToImage(imgData1):
@@ -45,4 +45,4 @@ def upload():
                 "output":convertToString("Images/final.jpg")})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host ='0.0.0.0', port=port)
