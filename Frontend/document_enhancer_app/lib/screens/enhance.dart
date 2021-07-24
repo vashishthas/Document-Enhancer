@@ -1,11 +1,22 @@
+import 'package:document_enhancer_app/utils/apiRequest.dart';
 import 'package:document_enhancer_app/utils/constant.dart';
 import 'package:document_enhancer_app/utils/getImage.dart';
+import 'package:document_enhancer_app/utils/imageList.dart';
 import 'package:document_enhancer_app/utils/routes.dart';
 import 'package:flutter/material.dart';
 
-class EnhanceRequest extends StatelessWidget {
+class EnhanceRequest extends StatefulWidget {
   const EnhanceRequest({Key? key}) : super(key: key);
 
+  @override
+  _EnhanceRequestState createState() => _EnhanceRequestState();
+}
+
+class _EnhanceRequestState extends State<EnhanceRequest> {
+  bool isLoading = false;
+  Image displayImage = Image.file(
+    Utils.imageFile,
+  );
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -29,18 +40,23 @@ class EnhanceRequest extends StatelessWidget {
                 Spacer(
                   flex: 2,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                      child: Center(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.file(
-                        Utils.imageFile,
+                isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                            child: Center(
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: displayImage
+                              // Image.file(
+                              //   Utils.imageFile,
+                              // ),
+                              ),
+                        )),
                       ),
-                    ),
-                  )),
-                ),
                 Spacer(
                   flex: 2,
                 ),
@@ -49,11 +65,22 @@ class EnhanceRequest extends StatelessWidget {
                     children: [
                       PageButton(
                         text: "Enhance",
-                        onPressed: () {},
+                        onPressed: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          displayImage =
+                              await ApiRequest().sendRequest(Utils.imageFile);
+                          //User cant resend the enhanced image
+                          setState(() {
+                            isLoading = false;
+                          });
+                        },
                       ),
                       PageButton(
                           text: "Edit",
                           onPressed: () {
+                            MyImages.addWidget(displayImage);
                             Navigator.pushNamed(context, MyRoutes.editRoute);
                           }),
                     ]),

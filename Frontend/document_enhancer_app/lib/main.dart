@@ -23,7 +23,6 @@ class MyApp extends StatelessWidget {
         title: 'Document Enhancer',
         theme: ThemeData(
           primarySwatch: Colors.grey,
-          // textTheme: TextTheme(headline1: TextStyle(color: Colors.white))
         ),
         home: FirstScreen());
   }

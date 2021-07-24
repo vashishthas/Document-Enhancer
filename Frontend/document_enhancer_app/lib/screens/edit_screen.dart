@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:document_enhancer_app/utils/constant.dart';
-import 'package:document_enhancer_app/utils/getImage.dart';
+import 'package:document_enhancer_app/utils/imageList.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 class Edit extends StatefulWidget {
   Edit({Key? key}) : super(key: key);
@@ -28,19 +31,20 @@ class _EditState extends State<Edit> {
           // backgroundColor: Colors.transparent,
           title: Text("Edit"),
           actions: [
-            Visibility(
-              // visible: MyImages.currentImageIndex == 0 ? false : true,
-              child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      // MyImages.currentImageIndex -= 1;
-                    });
-                  },
-                  child: Icon(
-                    Icons.undo_sharp,
-                    // color: Colors.white,
-                  )),
-            ),
+            InkWell(
+                onTap: () {
+                  setState(() {
+                    if (MyImages.currentImageIndex > 0) {
+                      MyImages.currentImageIndex -= 1;
+                    }
+                  });
+                },
+                child: Icon(
+                  Icons.undo_sharp,
+                  color: MyImages.currentImageIndex == 0
+                      ? Colors.white.withAlpha(100)
+                      : Colors.black,
+                )),
             SizedBox(width: 10),
             Visibility(
               // visible: MyImages.currentImageIndex == MyImages.maxIndex
@@ -77,11 +81,13 @@ class _EditState extends State<Edit> {
           selectedFontSize: 0,
           unselectedItemColor: Colors.white,
           selectedItemColor: Colors.red,
-          onTap: (index) {
-            setState(() {
-              tabIndex = index;
-              Navigator.pushNamed(context, tabs[tabIndex]);
-            });
+          onTap: (index) async {
+            // Utils.imageFile != await cropPredefinedImage(Utils.imageFile);
+            // setState(() {
+            //   // tabIndex = index;
+            //   cropPredefinedImage(Utils.imageFile);
+            //   // Navigator.pushNamed(context, tabs[tabIndex]);
+            // });
           },
           items: [
             BottomNavigationBarItem(
@@ -121,19 +127,6 @@ class _EditState extends State<Edit> {
                 ))
           ],
         ),
-        // Container(
-        //     child: Padding(
-        //   padding: const EdgeInsets.all(8.0),
-        //   child: Row(
-        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //     children: [
-        // Text("Rotate"),
-        // Text("Crop"),
-        // Text("Filter"),
-        // Text("Adjust")
-        //     ],
-        //   ),
-        // )),
         body: Container(
             color: MyConstant.darkColor,
             child: Center(
@@ -141,15 +134,44 @@ class _EditState extends State<Edit> {
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.file(
-                      Utils.imageFile,
-                    ),
-                  ),
+                      borderRadius: BorderRadius.circular(12),
+                      child: MyImages.img[MyImages.currentImageIndex]),
                 ),
               ),
             )),
       ),
     );
   }
+
+  static List<File> imageFiles = [];
+
+  Future<File?> cropPredefinedImage(File imageFile) async {
+    var imgFile = await ImageCropper.cropImage(
+      sourcePath: imageFile.path,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.original,
+        CropAspectRatioPreset.square,
+        CropAspectRatioPreset.ratio3x2,
+        CropAspectRatioPreset.ratio4x3,
+      ],
+      androidUiSettings: androidUiSettingsLocked(),
+      iosUiSettings: iosUiSettingsLocked(),
+    );
+    imageFiles.add(imgFile!);
+    return imgFile;
+  }
+
+  IOSUiSettings iosUiSettingsLocked() => IOSUiSettings(
+        aspectRatioLockEnabled: false,
+        resetAspectRatioEnabled: false,
+      );
+
+  AndroidUiSettings androidUiSettingsLocked() => AndroidUiSettings(
+        toolbarTitle: 'Crop Image',
+        backgroundColor: MyConstant.darkColor,
+        toolbarColor: Colors.grey,
+        toolbarWidgetColor: Colors.white,
+        initAspectRatio: CropAspectRatioPreset.original,
+        lockAspectRatio: false,
+      );
 }
