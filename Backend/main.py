@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-pathImage = "/mnt/ntfs2/Development/python/HACKATHON/"
+pathImage = "/mnt/ntfs2/Development/python/Document-Enhancer/"
 flag = 0
 
 def reorder(myPoints):
