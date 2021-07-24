@@ -41,14 +41,13 @@ def drawRectangle(img,biggest,thickness):
 
 def image(input):
     img = cv2.imread(pathImage+input)
-    x,y,c = img.shape
-    widthImg = int(y*1)
-    heightImg = int(x*1)
+    widthImg = 1600
+    heightImg = 768
     img = cv2.resize(img, (widthImg, heightImg)) # RESIZE IMAGE
     imgBlank = np.zeros((heightImg,widthImg, 3), np.uint8) # CREATE A BLANK IMAGE FOR TESTING DEBUGING IF REQUIRED
     imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) # CONVERT IMAGE TO GRAY SCALE
     imgBlur = cv2.GaussianBlur(imgGray, (5, 5), 1) # ADD GAUSSIAN BLUR
-    thres=[200,255] # GET TRACK BAR VALUES FOR THRESHOLDS
+    thres=[200,255]
     imgThreshold = cv2.Canny(imgBlur,thres[0],thres[1]) # APPLY CANNY BLUR
     kernel = np.ones((5, 5))
     imgDial = cv2.dilate(imgThreshold, kernel, iterations=2) # APPLY DILATION
@@ -87,5 +86,5 @@ def image(input):
         return imgWarpColored,flag
     else:
         flag = 1 
-        cv2.imwrite(pathImage+"Images/original.jpg",img)
+        # cv2.imwrite(pathImage+"Images/original.jpg",img)
         return img,flag
