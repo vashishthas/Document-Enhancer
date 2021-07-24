@@ -1,7 +1,13 @@
 import cv2
 import numpy as np
+from PIL import Image, ImageFilter
+from cv2 import dnn_superres
+from PIL.ImageFilter import (
+BLUR, CONTOUR, DETAIL, EDGE_ENHANCE, EDGE_ENHANCE_MORE,
+EMBOSS, FIND_EDGES, SMOOTH, SMOOTH_MORE, SHARPEN
+)
 
-pathImage = "/mnt/ntfs2/Development/python/Document-Enhancer/"
+pathImage = ""
 flag = 0
 
 def reorder(myPoints):
@@ -88,3 +94,26 @@ def image(input):
         flag = 1 
         # cv2.imwrite(pathImage+"Images/original.jpg",img)
         return img,flag
+    
+
+def sharpen(Image):
+    image = Image
+    sharpen_kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
+    sharpen = cv2.filter2D(image, -1, sharpen_kernel)
+    # cv2.imwrite(pathImage+"Images/sharpen.jpg", sharpen)
+    return sharpen 
+
+def super_resolution(sharpen):
+    sr = dnn_superres.DnnSuperResImpl_create()    # Read image
+    image = sharpen
+    path = pathImage+"models/FSRCNN_x4.pb"
+    sr.readModel(path)
+    sr.setModel("fsrcnn", 4)
+    result = sr.upsample(image)
+    cv2.imwrite(pathImage+"Images/upscaled.jpg", result)
+    return result
+
+def smooth():
+    img = Image.open(pathImage +'Images/upscaled.jpg')
+    img1 = img.filter(SMOOTH_MORE)
+    img1.save(pathImage+'Images/final.jpg')
