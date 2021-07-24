@@ -1,8 +1,9 @@
 import 'package:document_enhancer_app/utils/constant.dart';
+import 'package:document_enhancer_app/utils/routes.dart';
 import 'package:flutter/material.dart';
 
-class First extends StatelessWidget {
-  const First({Key? key}) : super(key: key);
+class FirstScreen extends StatelessWidget {
+  const FirstScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,18 +12,23 @@ class First extends StatelessWidget {
       appBar: AppBar(
           backgroundColor: Colors.transparent,
           title: Text(
-            "Enhancer",
-            style: TextStyle(color: Colors.white, fontSize: 25),
+            "Document Enhancer",
+            style: TextStyle(color: Colors.white),
           )),
       body: Center(
-        child: ClipOval(
-          // clipBehavior: Clip.antiAlias,
-          child: Container(
-            color: Colors.white12,
-            child: Icon(
-              Icons.add,
-              size: 120,
-              color: Colors.black,
+        child: InkWell(
+          splashColor: Colors.transparent,
+          onTap: () {
+            Navigator.pushNamed(context, MyRoutes.chooseRoute);
+          },
+          child: ClipOval(
+            child: Container(
+              color: Colors.white12,
+              child: Icon(
+                Icons.add,
+                size: 120,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
