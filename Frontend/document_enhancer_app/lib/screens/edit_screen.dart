@@ -47,30 +47,29 @@ class _EditState extends State<Edit> {
                       : Colors.black,
                 )),
             SizedBox(width: 10),
-            Visibility(
-              // visible: MyImages.currentImageIndex == MyImages.maxIndex
-              //     ? false
-              //     : true,
-              child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      if (MyImages.currentImageIndex < MyImages.maxIndex) {
-                        MyImages.currentImageIndex += 1;
-                      }
-                    });
-                  },
-                  child: Icon(
-                    Icons.redo_sharp,
-                    color: MyImages.currentImageIndex == MyImages.maxIndex
-                        ? Colors.white.withAlpha(100)
-                        : Colors.black,
-                    // color: Colors.white
-                  )),
-            ),
+            InkWell(
+                onTap: () {
+                  setState(() {
+                    if (MyImages.currentImageIndex < MyImages.maxIndex) {
+                      MyImages.currentImageIndex += 1;
+                    }
+                  });
+                },
+                child: Icon(
+                  Icons.redo_sharp,
+                  color: MyImages.currentImageIndex == MyImages.maxIndex
+                      ? Colors.white.withAlpha(100)
+                      : Colors.black,
+                )),
             SizedBox(width: 10),
             Padding(
               padding: const EdgeInsets.only(right: 18.0),
-              child: Icon(Icons.check),
+              child: InkWell(
+                  onTap: () {
+                    MyImages.maxIndex = MyImages.currentImageIndex;
+                    Navigator.pushNamed(context, MyRoutes.finalRoute);
+                  },
+                  child: Icon(Icons.check)),
             ),
           ],
         ),

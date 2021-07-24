@@ -2,6 +2,7 @@ import 'package:document_enhancer_app/editTab/filterPage.dart';
 import 'package:document_enhancer_app/editTab/sliderEdit.dart';
 import 'package:document_enhancer_app/screens/edit_screen.dart';
 import 'package:document_enhancer_app/screens/enhance.dart';
+import 'package:document_enhancer_app/screens/final.dart';
 import 'package:document_enhancer_app/screens/first_screen.dart';
 import 'package:document_enhancer_app/screens/second_screen.dart';
 import 'package:document_enhancer_app/utils/routes.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
           MyRoutes.editRoute: (context) => Edit(),
           MyRoutes.filterRoute: (context) => FilterPage(),
           MyRoutes.sliderRoute: (context) => SliderEdit(),
+          MyRoutes.finalRoute: (context) => FinalScreen()
         },
         debugShowCheckedModeBanner: false,
         title: 'Document Enhancer',
