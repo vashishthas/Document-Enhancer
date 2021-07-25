@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class MyFilters{
-  // static const ColorFilter noFilter = ColorFilter.matrix(<double>[
-  //    0, 0, 0, 0, 0,
-  //    0, 0, 0, 0, 0,
-  //    0, 0, 0, 0, 0,
-  //    0, 0,      0,      1, 0,
-  //  ]);
+  static const ColorFilter noFilter = ColorFilter.matrix(<double>[
+     1, 0, 0, 0, 0,
+     0, 1, 0, 0, 0,
+     0, 0, 1, 0, 0,
+     0, 0, 0, 1, 0,
+   ]);
 
   static const ColorFilter sepia = ColorFilter.matrix(<double>[
      0.393, 0.769, 0.189, 0, 0,
