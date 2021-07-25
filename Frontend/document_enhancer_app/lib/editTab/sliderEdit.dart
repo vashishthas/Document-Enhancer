@@ -49,11 +49,14 @@ class _SliderEditState extends State<SliderEdit> {
                       hue: _currentSliderValue1,
                       brightness: _currentSliderValue2,
                       saturation: _currentSliderValue3,
-                      child: Container(
-                          child: MyImages.img[MyImages.currentImageIndex]
-                          // MyImages.img[MyImages.currentImageIndex]
-                          // Image.file(Utils.imageFile),
-                          ))
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                            child: MyImages.img[MyImages.currentImageIndex]
+                            // MyImages.img[MyImages.currentImageIndex]
+                            // Image.file(Utils.imageFile),
+                            ),
+                      ))
                   // ColorFiltered(
                   //     colorFilter: ColorFilter.matrix(
                   //         ColorFilterGenerator.brightnessAdjustMatrix(

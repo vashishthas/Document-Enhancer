@@ -5,6 +5,7 @@ import 'package:document_enhancer_app/utils/constant.dart';
 import 'package:document_enhancer_app/utils/imageList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+// import 'package:gallery_saver/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -30,26 +31,60 @@ class _FinalScreenState extends State<FinalScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
+              Spacer(
+                flex: 2,
+              ),
+              Text(
+                "Final Image",
+                style: TextStyle(
+                    fontSize: 40,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
+              ),
+              Spacer(flex: 3),
               Center(
                   child: Padding(
                 padding: const EdgeInsets.all(18.0),
                 child: RepaintBoundary(
                     key: globalKey, child: MyImages.img[MyImages.maxIndex]),
               )),
-              ElevatedButton(
-                  onPressed: () async {
-                    // createPdf();
-                    // convertWidgetToImage();
-                    bool flag = await savePdf();
-                    if (flag) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Pdf saved successfully'),
-                        ),
-                      );
-                    }
-                  },
-                  child: Text("Create Pdf"))
+              Spacer(flex: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                      onPressed: () async {
+                        // createPdf();
+                        // convertWidgetToImage();
+                        bool flag = await savePdf();
+                        if (flag) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Pdf saved successfully'),
+                            ),
+                          );
+                        }
+                      },
+                      child: Text("Save Image")),
+                  ElevatedButton(
+                      onPressed: () async {
+                        // createPdf();
+                        // convertWidgetToImage();
+                        convertWidgetToImage(false);
+                        // if (flag) {
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     const SnackBar(
+                        //       content: Text('Pdf saved successfully'),
+                        //     ),
+                        //   );
+                        // }
+                      },
+                      child: Text("Create Pdf")),
+                ],
+              ),
+              Spacer(
+                flex: 2,
+              )
             ],
           ),
         ),
@@ -57,7 +92,7 @@ class _FinalScreenState extends State<FinalScreen> {
     );
   }
 
-  void convertWidgetToImage() async {
+  void convertWidgetToImage(bool toPdf) async {
     RenderRepaintBoundary? repaintBoundary =
         globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary?;
     ui.Image boxImage = await repaintBoundary!.toImage(pixelRatio: 1);
@@ -65,7 +100,11 @@ class _FinalScreenState extends State<FinalScreen> {
         await boxImage.toByteData(format: ui.ImageByteFormat.png);
     Uint8List uint8list = byteData!.buffer.asUint8List();
     Image.memory(uint8list);
-    createPdf(uint8list);
+    if (toPdf) {
+      createPdf(uint8list);
+    } else {
+      // saveImageToGallery(uint8list);
+    }
     // createPdf(Image.memory(uint8list));
 
     // return uint8list;
@@ -85,7 +124,7 @@ class _FinalScreenState extends State<FinalScreen> {
   }
 
   Future<bool> savePdf() async {
-    convertWidgetToImage();
+    convertWidgetToImage(true);
     try {
       final dir = await getExternalStorageDirectory();
       final file = File("${dir!.path}/finalDoc.pdf");
@@ -98,4 +137,10 @@ class _FinalScreenState extends State<FinalScreen> {
       return false;
     }
   }
+
+  // void saveImageToGallery(Uint8List uint8list) {
+  //   String store = 'flutterEnhanced.jpg';
+  //   File(store).writeAsBytes(uint8list);
+  //   GallerySaver.saveImage(store);
+  // }
 }
