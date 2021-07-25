@@ -89,7 +89,11 @@ class _EditState extends State<Edit> {
           onTap: (index) {
             tabIndex = index;
             MyImages.maxIndex = MyImages.currentImageIndex;
-            Navigator.pushNamed(context, MyRoutes.sliderRoute);
+            if (tabIndex == 3) {
+              Navigator.pushNamed(context, MyRoutes.sliderRoute);
+            } else if (tabIndex == 4) {
+              Navigator.pushNamed(context, MyRoutes.filterRoute);
+            }
             // Utils.imageFile != await cropPredefinedImage(Utils.imageFile);
             // setState(() {
             //   // tabIndex = index;

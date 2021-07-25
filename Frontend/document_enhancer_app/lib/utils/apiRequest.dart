@@ -12,20 +12,19 @@ class ApiRequest {
     var body = json.encode(data);
 
     var url = Uri.parse("$baseUrl");
-    // try {
+    try {
       var res = await http.post(url,
           headers: {"Content-Type": "application/json"}, body: body);
       print(res.statusCode);
       print(res.body);
-      final jsonBody=json.decode(res.body);
+      final jsonBody = json.decode(res.body);
       print("@@${jsonBody["output"]}");
-      final bytes=base64Decode(jsonBody["output"]);
-    return Image.memory(bytes);
-    } 
-    // catch (e) {
-    //   print(e);
-    //   return imageFile;
-    // }
+      final bytes = base64Decode(jsonBody["output"]);
+      return Image.memory(bytes);
+    } catch (e) {
+      print(e);
+      return Image.file(imageFile);
+    }
   }
 
   Map<String, String> convertImageToString(File imageFile) {
@@ -39,10 +38,4 @@ class ApiRequest {
     return data;
     // sendRequest(data);
   }
-
-  // convertStringToImage(String img64) {
-  //   final bytes = base64Decode(img64);
-  //   // File file=Io.File("decodedBezkoder.png");
-  //   // file.writeAsBytes(bytes);
-  // }
-// }
+}

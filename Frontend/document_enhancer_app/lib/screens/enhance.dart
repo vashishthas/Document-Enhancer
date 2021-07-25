@@ -13,83 +13,122 @@ class EnhanceRequest extends StatefulWidget {
 }
 
 class _EnhanceRequestState extends State<EnhanceRequest> {
+  bool isEnhanced = false;
   bool isLoading = false;
   Image displayImage = Image.file(
     Utils.imageFile,
   );
+  Image enhancedImage = Image.file(Utils.imageFile);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          color: MyConstant.darkColor,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Spacer(
-                  flex: 3,
+        body: Stack(
+          children: [
+            Container(
+              color: MyConstant.darkColor,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Spacer(
+                      flex: 3,
+                    ),
+                    Text(
+                      "Enhancer",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 31,
+                          color: Colors.white),
+                    ),
+                    Spacer(
+                      flex: 2,
+                    ),
+                    isLoading
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                                child: Center(
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: displayImage
+                                  // Image.file(
+                                  //   Utils.imageFile,
+                                  // ),
+                                  ),
+                            )),
+                          ),
+                    Spacer(
+                      flex: 2,
+                    ),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          PageButton(
+                            text: "Enhance",
+                            onPressed: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              enhancedImage = await ApiRequest()
+                                  .sendRequest(Utils.imageFile);
+                              //User cant resend the enhanced image
+                              setState(() {
+                                displayImage = enhancedImage;
+                                isLoading = false;
+                                isEnhanced = true;
+                              });
+                            },
+                          ),
+                          PageButton(
+                              text: "Edit",
+                              onPressed: () {
+                                MyImages.addWidget(enhancedImage);
+                                Navigator.pushNamed(
+                                    context, MyRoutes.editRoute);
+                              }),
+                        ]),
+                    Spacer(
+                      flex: 3,
+                    )
+                  ],
                 ),
-                Text(
-                  "Enhancer",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 31,
-                      color: Colors.white),
-                ),
-                Spacer(
-                  flex: 2,
-                ),
-                isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                            child: Center(
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: displayImage
-                              // Image.file(
-                              //   Utils.imageFile,
-                              // ),
-                              ),
-                        )),
-                      ),
-                Spacer(
-                  flex: 2,
-                ),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      PageButton(
-                        text: "Enhance",
-                        onPressed: () async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          displayImage =
-                              await ApiRequest().sendRequest(Utils.imageFile);
-                          //User cant resend the enhanced image
-                          setState(() {
-                            isLoading = false;
-                          });
-                        },
-                      ),
-                      PageButton(
-                          text: "Edit",
-                          onPressed: () {
-                            MyImages.addWidget(displayImage);
-                            Navigator.pushNamed(context, MyRoutes.editRoute);
-                          }),
-                    ]),
-                Spacer(
-                  flex: 3,
-                )
-              ],
+              ),
             ),
-          ),
+            isEnhanced
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 20.0,top: 10),
+                    child: Row(children: [
+                      Spacer(),
+                      InkWell(
+                          onTap: () {
+                            setState(() {
+                              displayImage = Image.file(
+                                Utils.imageFile,
+                              );
+                            });
+                          },
+                          child: Icon(
+                            Icons.undo,
+                            color: Colors.white,
+                            size: 30,
+                          )),
+                      SizedBox(width: 10),
+                      InkWell(
+                          onTap: () {
+                            setState(() {
+                              displayImage = enhancedImage;
+                            });
+                          },
+                          child:
+                              Icon(Icons.redo, color: Colors.white, size: 30))
+                    ]),
+                  )
+                : SizedBox(),
+          ],
         ),
       ),
     );
