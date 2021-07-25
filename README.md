@@ -10,7 +10,7 @@
 <img src = 'Frontend/screenshots/3.jpg' height=500>
 </p>
 <p>
-<img src = 'Frontend/screenshots/4.jpg' height=500>
+<img src = 'Frontend/screenshots/4.jpeg' height=500>
 <img src = 'Frontend/screenshots/5.jpg' height=500>
 <img src = 'Frontend/screenshots/6.jpg' height=500>
 </p>
