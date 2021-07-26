@@ -17,10 +17,11 @@ class _FilterPageState extends State<FilterPage> {
   @override
   Widget build(BuildContext context) {
     List<ColorFilter> filters = [
-      // MyFilters.noFilter,
+      MyFilters.noFilter,
       MyFilters.greyscale,
       MyFilters.sepia
     ];
+    // List<String> text = ["Original", "GreyScale", "Sepium"];
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -46,7 +47,31 @@ class _FilterPageState extends State<FilterPage> {
                 itemBuilder: (context, index) {
                   filtered = ColorFiltered(
                       colorFilter: filters[index],
-                      child: MyImages.img[MyImages.maxIndex]);
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          // Spacer(
+                          //   flex: 4,
+                          // ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: MyImages.img[MyImages.maxIndex],
+                          ),
+                          // Spacer(
+                          //   flex: 2,
+                          // ),
+                          // Text(
+                          //   text[index],
+                          //   style: TextStyle(
+                          //       fontSize: 30,
+                          //       color: Colors.white,
+                          //       fontWeight: FontWeight.bold),
+                          // ),
+                          // Spacer(
+                          //   flex: 4,
+                          // )
+                        ],
+                      ));
                   return filtered;
                 })
             // ClipRRect(child: Image.file(Utils.imageFile)),
