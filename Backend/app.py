@@ -4,7 +4,7 @@ from flask import Flask,jsonify,request
 
 
 app = Flask(__name__)
-port=80
+port =5000
 
 
 def convertToImage(imgData1):
@@ -25,24 +25,28 @@ def index():
 @app.route('/upload',methods=['POST'])
 def upload():
     image_data = request.get_json()
-    # print(f"debugging the api{image_data}")
+    # print(f"debugging the api{image_data}")\  
+    message = []
+    print(type(image_data['feature']))
     convertToImage(image_data)
     input_image ="Images/input.jpg"
-    output, flag = image(input_image)
-    if flag == 0 and image_data["feature"]=="True":
+    
+    if  image_data["feature"]=="True":
+        output, flag = image(input_image)
         sharp_image = sharpen(output)
         super_resoluted_img = super_resolution(sharp_image)
         smooth()
         return({"result":"The Image Edged where detected",
                 "output":convertToString("Images/final.jpg")})
 
-    elif flag == 1 or image_data["feature"]=="False":
-        
+    elif image_data["feature"]=="False":
+        output= cv2.imread(input_image)
         sharp_image = sharpen(output)
         super_resoluted_img = super_resolution(sharp_image)
         smooth()
-        return({"result":"The Image edged weren't detected but the quality of the image is increased",
+        return ({"result":"The Image edged weren't detected but the quality of the image is increased",
                 "output":convertToString("Images/final.jpg")})
 
 if __name__ == '__main__':
-    app.run(host ='0.0.0.0', port=port)
+    # app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)
